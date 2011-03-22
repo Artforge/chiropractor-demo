@@ -1,0 +1,182 @@
+<%= stylesheet_link_tag "uploadify" %>
+<%= javascript_include_tag 	"jquery.uploadify.min","swfobject" %>
+
+<div style="width:800px;">
+	<h1>
+		Listing users
+		<%= link_to('New User', new_user_path, :rel => "#user_form_container", :id => "new_user", :class => "green button fr") %>
+	</h1>
+
+	<table class="data" width="100%">
+		<thead>
+			<tr>
+				<th>&nbsp;</th>
+				<th data-action="sort" data-attribute="email">Email<span class="icon"/></th>
+				<th data-action="sort" data-attribute="name">Name<span class="icon"/></th>
+				<th data-action="sort" data-attribute="date_of_birth">Date of birth<span class="icon"/></th>
+				<th data-action="sort" data-attribute="favorite_color">Color<span class="icon"/></th>
+				<th class="noborder" style="width:180px;">&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody data-collection="users">
+			<% @users.each do |user| %>
+				<%= render :partial => "index_row", :locals => {:user => user} %>
+			<% end %>
+			<!-- This pattern below could be interesting for situations with no existing records -->
+			<!-- Another option would be pulling the partial from the request in the event of nothing to copy -->
+			<%= render :partial => "index_row", :locals => {:user => User.new, :template => true} %>
+		</tbody>
+	</table>
+</div>
+
+<% @user = @users.first %>
+
+<div id="user_form_container" class="facebox" data-model="<%= @user.class.to_s.underscore %>" data-view="edit">
+	<h2>Edit your profile</h2>
+	<div>
+		<%= render :partial => 'form', :locals => {:user => User.new} %>
+	</div>
+</div>
+
+<div id="user_display_form" class="facebox" data-model="<%= @user.class.to_s.underscore %>" data-view="show">
+	<p><b>Email:</b><%= ajax_content_tag(@user, :email) %></p>
+	<p><b>Name:</b><%= ajax_content_tag(@user, :name) %></p>
+	<p><b>Biography:</b><%= ajax_content_tag(@user, :biography) %></p>
+	<p><b>Date of birth:</b><%= ajax_content_tag(@user, :date_of_birth) %></p>
+	<p><b>Favorite color:</b><%= ajax_content_tag(@user, :favorite_color) %></p>
+	<p><b>Updated:</b><%= ajax_content_tag(@user, :updated_at) %></p>
+</div>
+
+<script>
+
+	<% arr = [] %>
+	<% request.env['HTTP_COOKIE'].each_char{|c| arr.push(c[0].to_s)} %>
+	<% session = arr.join("x") %>
+	
+	function initUploadify(model){
+		$('#user_avatar').uploadify ({
+			script          : model.collection.url + "/" + model.id,
+			method			: "PUT",
+			uploader        : '/flash/uploadify.swf',
+			multi           : false,
+			auto            : true,
+			queueID			: "fileQueue",
+			scriptData      : {'session_encoded': '<%= session %>', 'foo': 'bar', '_method' : 'put','_http_accept': 'text/javascript'},
+			cancelImg       : '/images/cancel.png',  //take care that the image is accessible
+			onComplete	  : uploadComplete
+		});
+	}
+	
+	function unUploadify(element){
+		if(!element){
+			var element="*";
+		}
+		$(element).next("object").remove();
+		$(element).css("display","inline");
+		$(".uploadifyQueueItem").remove();
+	}
+	
+	function uploadComplete(event, ID, fileObj, response, data){
+		console.log("uploadComplete")
+		console.log("event",event);
+		console.log("ID",ID);
+		console.log("fileObj",fileObj);
+		console.log("response",response);
+		console.log("data",data);
+		// };
+		// if (JSON.parse(response).image){
+		// 			objImage = JSON.parse(response).image;
+		// 			images[objImage.id] = $("<li>").image(objImage,{template: IMAGE_TEMPLATE});
+		// 			$('#media').prepend(images[objImage.id]);
+		// 			jQuery.facebox({ ajax:"/pictures/" + objImage.id + "/edit"},"media_cropper");
+		// 		}else{
+		// 			objVideo = JSON.parse(response).video;
+		// 			videos[objVideo.id] = $("<li>").video(objVideo,{template: VIDEO_TEMPLATE});
+		// 			$('#media').prepend(videos[objVideo.id]);
+		// 		}
+		// 		$('a[rel*=facebox]').facebox();
+	}
+	
+</script>
+
+<script>
+
+	function closeOverlay(){
+		$('a.button[rel*="form"]').each(function() {
+			$(this).overlay().close();
+		});
+	}
+
+	function updateComplete(model){
+		closeOverlay();
+		model.display.effect("highlight", {}, 1000);
+	}
+	
+	function createComplete(model){
+		initOverlay(model.display)
+		closeOverlay();
+	}
+	
+	function saveError(model,response){
+		alert("Error!")
+	}
+	
+	function initOverlay(node){
+		var scope = $('a.button[rel*="form"]');
+		if (node){scope = node.find('a.button[rel*="form"]')};
+		scope.overlay({mask: {color: '#000000', loadSpeed: 200, opacity: 0.6}});
+	}
+	
+	function setFormText(model,header,button){
+		model.editor.find('h2').html(header + model.model_name);
+		model.editor.find(':submit').val(button + model.model_name);
+	}
+	
+	var User = Chiropractor.Model.extend({model_name: "User", collection_name: "Users",class_name: "user"});
+	var Users = Chiropractor.Collection.extend({url: '<%= users_url %>',model: User});
+	var users_controller;
+	
+	var overlay;
+	
+	$(document).ready(function() {
+		var editorElement = $("#user_form_container")
+		
+		// var users = new Users().fetch();
+		var users = new Users(<%= raw(@users.to_json) %>,{
+			url:"<%= users_url %>",
+			display: $('tbody[data-collection="users"]')
+		});
+		
+		users_controller = new Chiropractor.ResponseController(users);
+		
+		$('[data-action="sort"]').click(function(){
+			users.sortView($(this).data("attribute"));
+		})
+		
+		$('#new_user').click(function(){
+			user = new User(JSON.parse('<%= raw(User.new.to_json) %>'),{});
+			users_controller.new(user);
+			unUploadify(user.editor.find("#user_avatar"));
+			setFormText(user,"Create a new ","Create ")
+		});
+		
+		$('a[data-action="edit"]').click(function(){
+			user = users.get($(this).data("id"));
+			users_controller.edit(user.id);
+			setFormText(user,"Edit ","Update ");
+			unUploadify(user.editor.find("#user_avatar"));
+			initUploadify(user);
+			// $("#user_form_container").show("blind",{},250);
+		});
+		
+		$('a[data-action="show"]').click(function(){
+			users_controller.show($(this).data("id"));
+			// $("#user_display_form").show("blind",{},250);
+		});
+		
+		$('input[type="date"]').datepicker({showOtherMonths: true, selectOtherMonths: true});
+		
+		initOverlay();
+	});
+
+</script>

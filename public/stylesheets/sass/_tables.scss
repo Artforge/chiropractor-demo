@@ -1,0 +1,121 @@
+table.data{
+	border-collapse:collapse;
+	font-size:75%;
+	margin-left:1px;
+	thead{
+		th {
+			background: #eee; /* for non-css3 browsers */
+			background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#eee)); /* for webkit browsers */
+			background: -moz-linear-gradient(top,  #ccc,  #eee); /* for firefox 3.6+ */
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#eeeeee'); /* for IE */
+			a{
+				&:hover{
+					color:blue;
+					text-decoration:none;
+				}
+				img{
+					width:12px;
+					height:11px;
+					margin-left:3px;
+				}
+			}
+			span.icon{
+				display:inline-block;
+				height:10px;
+				width:10px;
+			}
+			&.sort_asc span.icon{
+				background:url(/images/tri_up.gif) no-repeat 0px 2px;
+			}
+			&.sort_desc span.icon{
+				background:url(/images/tri_down.gif) no-repeat 0px 2px;
+			}
+			&.vertical{
+				width:18px;
+				padding:0px;
+				& > div{
+					width:18px;
+					border:1px dashed #fff;
+					position:relative;
+					& > div{
+						width:100px;
+						height:14px;
+						border:1px solid #ccc;
+						font-size:10px;
+						overflow:hidden;
+						position:absolute;
+					   -webkit-transform: rotate(-90deg);
+					   -moz-transform: rotate(-90deg);
+					   bottom:25px;right:-45px;padding:3px;
+					}
+				}
+				&.even > div > div{
+					background:#fff;
+				}
+				&.odd > div > div{
+					background:#eee;
+				}
+			}
+		}
+	}
+	tbody{
+		background:#fff;
+		.fade {
+			margin-right:-3px;
+			background: -moz-linear-gradient(right,  rgba(255,255,255,1),  rgba(255,255,255,0)); /* for firefox 3.6+ */
+			float:right;
+			position:relative;
+			width:37px;
+			z-index:9990;
+		}
+		tr{
+			background-color:#fff; 
+			&.even, &:nth-child(even){ 
+				background-color:#eee; 
+				.fade {
+					background: -moz-linear-gradient(right,  rgba(238,238,238,1),  rgba(238,238,238,0)); /* for firefox 3.6+ */
+					float:right;
+					position:relative;
+					width:37px;
+					z-index:9990;
+				}
+			}
+		}
+	}
+	
+	td{
+		overflow:hidden;
+/*		padding-right:0;*/
+	}
+	
+	td,th{
+		position:relative;
+		padding:2px 3px 2px 3px;
+		border:1px solid #ccc;
+		overflow: hidden;
+		&.noborder{
+			background:none;
+			border:none;
+		}
+		&.left{
+			text-align:left;
+		}
+		&.right{
+			text-align:right;
+		}
+		&.center{
+			text-align:center;
+		}
+		.info{
+			display:block;
+			margin:0;
+			white-space:nowrap;
+		}
+	}
+	&.hborder{
+		td, th{
+			border-left:none;
+			border-right:none;
+		}
+	} 
+}

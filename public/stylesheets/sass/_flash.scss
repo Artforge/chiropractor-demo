@@ -1,0 +1,35 @@
+#flash_notice {
+	-moz-border-radius:5px 5px 5px 5px;
+	background:none repeat scroll 0 0 #CCFFCC;
+	border:1px solid #AADDAA;
+	color:#333333;
+	padding:10px 10px 8px;
+	.error{
+		background:none repeat scroll 0 0 #FFCCCC;
+		border:1px solid #DDAAAA;
+		color:#333333;
+	}
+	.alert{
+		background:none repeat scroll 0 0 #FFCCCC;
+		border:1px solid #FF0000;
+		color:#000000;
+	}
+}
+
+#flash_error {
+	-moz-border-radius:5px 5px 5px 5px;
+	background:none repeat scroll 0 0 #FFCCCC;
+	border:1px solid #DDAAAA;
+	color:#333333;
+	margin:0 0 10px;
+	padding:10px 10px 8px;
+}
+
+#flash_alert {
+	-moz-border-radius:5px 5px 5px 5px;
+	background:none repeat scroll 0 0 #FFCCCC;
+	border:1px solid #FF0000;
+	color:#000000;
+	margin:0 0 10px;
+	padding:10px 10px 8px;
+}

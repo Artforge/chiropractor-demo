@@ -1,0 +1,72 @@
+.fl{float:left;}
+.fr{float:right;}
+.clr{clear:both;}
+
+.right{text-align:right;}
+.left{text-align:left;}
+.center{text-align:center;}
+
+.disabled{color:#ccc;}
+
+.bold{font-weight:bold;}
+
+.shadow{-moz-box-shadow: #333 0px 3px 10px -5px;-webkit-box-shadow: #333 0px 3px 3px -5px;box-shadow: #333 0px 3px 3px -5px;}
+div.paper_shadow{-moz-box-shadow: rgba(0,0,0,0.2) 3px 3px 5px;-webkit-box-shadow: rgba(0,0,0,0.2) 3px 3px 5px;box-shadow: rgba(0,0,0,0.2) 3px 3px 5px;}
+div.note.paper_shadow{margin-bottom:10px;}
+
+.drawer_shadow{-moz-box-shadow: rgba(0,0,0,0.3) -3px 3px 8px;-webkit-box-shadow: rgba(0,0,0,0.3) -3px 3px 8px;box-shadow: rgba(0,0,0,0.3) -3px 3px 8px;}
+.drawer_shadow_left{
+	-moz-box-shadow: rgba(0,0,0,0.3) 3px 3px 8px;
+	-webkit-box-shadow: rgba(0,0,0,0.3) 3px 3px 8px;
+	box-shadow: rgba(0,0,0,0.3) 3px 3px 8px;
+}
+
+.opacity_30 {filter:alpha(opacity=30);-moz-opacity:0.3;-khtml-opacity: 0.3;opacity: 0.3;}
+.opacity_50 {filter:alpha(opacity=50);-moz-opacity:0.5;-khtml-opacity: 0.5;opacity: 0.5;}
+.opacity_70 {filter:alpha(opacity=70);-moz-opacity:0.7;-khtml-opacity: 0.7;opacity: 0.7;}
+.opacity_80 {filter:alpha(opacity=80);-moz-opacity:0.8;-khtml-opacity: 0.8;opacity: 0.8;}
+.opacity_90 {filter:alpha(opacity=90);-moz-opacity:0.9;-khtml-opacity: 0.9;opacity: 0.9;}
+
+h1.tight,
+h2.tight,
+h3.tight,
+h4.tight{margin-bottom:5px;}
+
+.pad_5{padding:5px;}
+.pad_10{padding:10px;}
+.pad_15{padding:15px;}
+.pad_20{padding:20px;}
+
+.margin_5{margin:5px;}
+.margin_8{margin:8px;}
+.margin_10{margin:10px;}
+.margin_15{margin:15px;}
+.margin_20{margin:20px;}
+
+.noborder{border:none !important;}
+
+.upcase{text-transform: uppercase;}
+
+.polaroid {
+    position: relative;
+    background: #fff;
+    width: 200px;
+    padding: 7px;
+    margin: 10px;
+    text-align: center;
+    -moz-box-shadow: 1px 1px 3px #222;
+    -moz-transform: rotate(-5deg);
+    -webkit-box-shadow: 1px 1px 3px #222;
+    -webkit-transform: rotate(-5deg);
+    box-shadow: 1px 1px 3px #222;
+    -o-transform: rotate(-5deg);
+    transform: rotate(-5deg);
+	div.full_image{
+		border:1px solid $border_color;
+	}
+	&:hover{
+		z-index:99;
+	}
+}
+
+.hidden{display:none;}

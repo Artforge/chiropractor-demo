@@ -1,0 +1,18 @@
+<% 
+template = local_assigns[:template]
+if template 
+	user.id = 0
+end
+%>
+<tr data-model="<%= user.class.to_s.underscore %>" data-id="<%= user.id %>" class="<%= "template" if template %>">
+	<td data-property="avatar_thumbnail_url" class="avatar"><%= image_tag(user.avatar_thumbnail_url) %></td>
+	<td data-property="email"><%= user.email %></td>
+	<td data-property="name"><%= user.name %></td>
+	<td data-property="date_of_birth"><%= user.date_of_birth %></td>
+	<td data-property="favorite_color"><%= user.favorite_color %></td>
+	<td class="center">
+	<%= link_to('Show', user, :rel => "#user_display_form", "data-id" => user.id, "data-action" => "show", :class => "small blue button") %>
+	<%= link_to('Edit', (user.id ? edit_user_path(user) : ""), :rel => "#user_form_container", "data-id" => user.id, "data-action" => "edit", :class => "small green button") %>
+	<%= link_to('Destroy', user, :class => 'small red button remote-delete', :confirm => 'Are you sure?', :method => :delete) %>
+	</td>
+</tr>

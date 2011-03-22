@@ -1,0 +1,210 @@
+@import "formtastic";
+
+/* -------------------------------------------------------------------------------------------------
+
+Load this stylesheet instead of the standard formtastic.css + formtastic_changes.css in your layouts to override the CSS to suit your needs.
+The above import will allow you to update formtastic.css with new releases without clobbering your own changes.
+
+--------------------------------------------------------------------------------------------------*/
+
+form.formtastic{
+	fieldset {
+		ol {
+			li{
+				width:100%;
+				fieldset{
+					width:100%;
+				}
+				&.string input, &.password input, &.numeric input { 
+					width:auto; 
+					padding:2px;
+				}
+				label{
+					input {
+						margin-top:-0.6em;
+					}
+				}
+				&.check_boxes {
+					fieldset{
+						ol{
+							li{
+								label{
+									font-weight:normal;
+								}
+							}
+						}
+					}
+				}
+				&.token-input-token-facebook {
+					margin: 3px;
+					padding: 1px 3px;
+				}
+			}
+		}
+		&.buttons{
+			display:block;
+			padding-left:0;
+			li{
+				display:inline-block;
+				float:left;
+				width:auto;
+			}
+		}
+	}
+	&.inline {
+		& > ol{
+			& > li{
+				float:left;
+				margin-right:10px;
+			}
+		}
+		fieldset ol li{
+			float:left;
+			width:auto;
+			margin:0 10px 0 0;
+			label{
+				float:left;
+				width:auto;
+				margin-right:5px;
+			}
+			input{
+				margin-top:5px;
+				&.ac_input{ //autocomplete
+					float:left;
+					width:none;
+					margin-top:8px;
+					padding:2px;
+					font-size:14px;
+				}
+			}
+			select{
+				height:24px;
+				font-size:14px;
+			}
+		}
+		.fr{
+			float:right;
+			margin-left:10px;
+			margin-right:0px;
+		}
+	}
+	&.nolabel{ 
+		& > ol{
+			& > li{
+				& > label{
+					display:none;
+				}
+			}
+		}
+	}
+	&.nolegend{
+		& > legend{
+			display:none;
+		}
+	}
+	/* VERTICAL ORIENTED FORMS */
+	&.vertical{
+		fieldset ol li label {
+			display:block;
+			float:none;
+			width:auto;
+			margin-bottom:3px;
+			&.nolabel{
+				display:none;
+			}
+		}
+		fieldset ol li p.inline-hints {
+			margin:0.5em 0 0 0;
+		}
+		fieldset{
+			& > ol{
+				& > li{
+					&.check_boxes{
+						fieldset{
+							margin-bottom:0px;
+						}
+						ol{
+							float:none;
+							width:auto;
+							padding:0px;
+							li{line-height:11px;}
+						}
+					}
+					select{
+						padding:1px;
+					}
+					label{
+						display:block;
+						float:none;
+						width:auto;
+						margin-bottom:3px;
+						&.nolabel{
+							display:none;
+						}
+					}
+					fieldset legend{
+						position:relative;
+						&.label{
+							label{
+								position:relative;
+							}
+						}
+					}
+					p.inline-hints {
+						margin:0;
+					}
+					&.string input {
+						max-width:none;
+					}
+					&.date fieldset ol{
+						display:block;
+						padding:0px;
+						width:auto;
+						float:none;
+					}
+					&.vertical{
+						margin-bottom:10px;
+					}
+					&.right{
+						float:right;
+						width:auto;
+						clear:right;
+					}
+					&.left{
+						float:left;
+						clear:left;
+						width:auto;
+					}
+				}
+			}
+			&.buttons{
+				padding-left:1.4em;
+			}
+		}
+	}
+	&.nopadding{
+		& > fieldset{
+			padding:0px;
+			&.buttons{
+				padding-left:0px;
+			}
+		}
+	}
+	&.nopadding_vertical{
+		& > fieldset{
+			padding-top:0px;
+			padding-bottom:0px;
+		}
+	}
+	&.nomargin{
+		& > fieldset{
+			margin:0px;
+		}
+	}
+}
+
+
+		
+/*form.formtastic.assignment{}
+form.formtastic.assignment ol li label{float:none;}
+form.formtastic.assignment ol li input{float:none;}*/

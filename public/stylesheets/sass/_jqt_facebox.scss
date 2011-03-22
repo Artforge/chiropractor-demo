@@ -1,0 +1,27 @@
+.facebox {
+	display:none;
+	padding:10px;
+	width:400px;
+	background-color:#fff;
+	font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
+	border:10px solid rgba(0,0,0,0.75);
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	& > div{}
+	h2 {
+		margin:-10px;
+		margin-bottom:5px;
+		color:#fff;
+		background-color:#6D84B4;
+		padding:8px 10px;
+		border-bottom:1px solid #3B5998;
+		font-size:18px;
+	}
+	.close {
+		background-image:url(/images/close.png);
+		position:absolute; right:-18px; top:-20px;
+		cursor:pointer;
+		height:35px;
+		width:35px;
+	}
+}

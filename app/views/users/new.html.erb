@@ -1,0 +1,78 @@
+<h1>New user</h1>
+
+<style>
+	.changed{color:red;}
+	div.user{border:1px solid #ccc;padding:10px 30px;width:500px;margin:10px 0;}
+	div.user.dirty{border-color:red;}
+	div.user b{margin-right:5px;}
+</style>
+
+<div id="user_form_container" class="facebox">
+	<h2>Create your profile</h2>
+	<div>
+		<%= render :partial => 'form', :locals => {:user => @user} %>
+	</div>
+</div>
+
+<%= link_to('Edit', new_user_path(), :rel => "#user_form_container", :class => "large blue button") %>
+<%= link_to('Back', users_path, :class => "large red button") %>
+
+
+<script>
+
+	var userOverlay;
+
+	function saveComplete(model,response){
+		model.refresh();
+		alert("Saved User- ID:" + model.attribute.id)
+		// model.display.effect("highlight", {}, 1000);
+		// userOverlay.overlay().close();
+	}
+	
+	function saveError(model,response){
+		alert("Error!")
+	}
+	
+	function initialize(model){
+		model.watchForm();
+		submitButton = model.editor.find(':submit');
+		submitButton.click(function(){
+			if (submitButton.hasClass("disabled")){
+				return false
+			}
+			model.save("",{
+				error:saveError,
+				success:function(model,response){
+					saveComplete(model,response)
+				}
+			});
+			return false
+		});
+	}
+	
+	$(document).ready(function() {
+		var UserJson = '<%= raw(@user.to_json) %>';
+		
+		// displayElement = $('[data-model="user"][data-id="1"]');
+		editElement = $("#edit_user_<%= @user.id %>"),
+
+		User = new Chiropractor(JSON.parse(UserJson),{editor: editElement});
+		initialize(User);  
+		
+		console.log("1")
+		
+		userOverlay = $("a.button[rel]").overlay({
+			mask: {color: '#000000', loadSpeed: 200, opacity: 0.6, load: true}
+		});
+		
+			console.log("2")
+		
+		$('input[type="date"]').datepicker({
+			showOtherMonths: true,
+			selectOtherMonths: true
+		});
+		
+		// console.log("userOverlay",userOverlay.overlay())
+	});
+
+</script>

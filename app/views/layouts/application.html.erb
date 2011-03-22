@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ajax Patterns Test</title>
+  <%= stylesheet_link_tag "application" %>
+  <%= javascript_include_tag "date","json2","jquery.min", "jquery-ui.min", "jquery.tools.min","underscore","backbone","chiropractor" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tag %>
+</head>
+<body>
+	
+	<div style="width:800px;">
+	  <div id="flash_notice" style="min-height:30px;display:none"></div>
+	</div>
+	
+	<%= yield %>
+	
+</body>
+</html>

@@ -1,0 +1,131 @@
+<script>
+
+	function updateComplete(model){
+		model.display.effect("highlight", {}, 1000);	
+		model.editor.effect("highlight", {}, 1000);	
+	}
+	
+	function createComplete(model){
+		model.editor.effect("highlight", {}, 1000);	
+	}
+	
+	function saveError(model,response){
+		alert("Error!")
+	}
+	
+	function setFormText(model,header,button){
+		model.editor.find('h2').html(header + model.model_name);
+		model.editor.find(':submit').val(button + model.model_name);
+	}
+	
+	function newPost(){
+		post = new Post(JSON.parse('<%= raw(Post.new.to_json) %>'),{});
+		posts_controller.new(post);
+		setFormText(post,"Create a new ","Create ")
+	}
+	
+	var Post = Chiropractor.Model.extend({model_name: "Post", collection_name: "Posts",class_name: "post"});
+	var Posts = Chiropractor.Collection.extend({url: '<%= posts_url %>',model: Post});
+	var posts_controller;
+	
+	
+	$(document).ready(function() {
+		// var users = new Users().fetch();
+		var posts = new Posts(<%= raw(@posts.to_json(:include => :user)) %>,{
+			url:"<%= posts_url %>",
+			display: $('tbody[data-collection="posts"]')
+		});
+		
+		posts_controller = new Chiropractor.ResponseController(posts);
+		
+		$('[data-action="sort"]').click(function(){
+			posts.sortView($(this).data("attribute"));
+		})
+		
+		$('#new_post').click(function(){
+			newPost();
+			return false;
+		});
+		
+		$('a[data-action="edit"]').click(function(){
+			post = posts.get($(this).data("id"));
+			posts_controller.edit(post.id);
+			setFormText(post,"Edit ","Update ");
+			return false;
+		});
+		
+		$('a[data-action="show"]').click(function(){
+			posts_controller.show($(this).data("id"));
+			return false;
+		});
+		
+		$('input[type="date"]').datepicker({showOtherMonths: true, selectOtherMonths: true});
+		newPost();
+	});
+
+</script>
+
+<style>
+	#post_form_container{
+		border:1px solid #ccc;
+		margin-left:1px;
+		margin-right:-1px;
+	}
+	#post_form_container h2{
+		background: #eee; /* for non-css3 browsers */
+		background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#eee)); /* for webkit browsers */
+		background: -moz-linear-gradient(top,  #ccc,  #eee); /* for firefox 3.6+ */
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#eeeeee'); /* for IE */
+		margin:0px;
+		padding:5px;
+		border-bottom:1px solid #ccc;
+	}
+	#post_form_container > div{
+		padding:10px;
+	}
+
+	.bordered{padding:20px;border:1px solid lime;}
+</style>
+
+<div style="width:800px;margin:10px;" class="fl">
+	<h1>
+		Listing posts
+		<%= link_to('New Post', new_post_path, :rel => "#post_form_container", :id => "new_post", :class => "green button fr") %>
+	</h1>
+
+	<div id="post_form_container" data-model="post" data-view="edit">
+		<h2>Edit Post</h2>
+		<div>
+			<%= render :partial => 'form', :locals => {:post => @post} %>
+		</div>
+	</div>
+	<table class="data" width="100%">
+		<thead>
+			<tr>
+				<th data-action="sort" data-attribute="user">User<span class="icon"/></th>
+				<th data-action="sort" data-attribute="title">Title<span class="icon"/></th>
+				<th data-action="sort" data-attribute="content">Content<span class="icon"/></th>
+				<th style="width:180px;">&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody data-collection="posts">
+			<% @posts.each do |post| %>
+				<%= render :partial => "index_row", :locals => {:post => post} %>
+			<% end %>
+			<%= render :partial => "index_row", :locals => {:post => Post.new, :template => true} %>
+		</tbody>
+	</table>
+	
+</div>
+
+<div class="fl bordered" style="width:300px;">
+	<div id="post_display_form" data-model="post" data-view="show">
+		<p><b>User:</b> <%= ajax_content_tag(@post, "user.name") %></p>
+		<p><b>Title:</b> <%= ajax_content_tag(@post, :title) %></p>
+		<p><b>Content:</b> <%= ajax_content_tag(@post, :content) %></p>
+		<p><b>Updated:</b> <%= ajax_content_tag(@post, :updated_at) %></p>
+	</div>
+</div>
+
+<div class="clr"></div>
+

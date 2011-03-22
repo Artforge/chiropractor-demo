@@ -1,0 +1,26 @@
+<%= form_for(post) do |f| %>
+  <% if @post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+      <ul>
+      <% @post.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_id %>: <%= f.ajax_select(:user_id, options_from_collection_for_select(User.scoped, "id", "name"), :include_blank => "Select Author") %>
+  </div>
+  <div class="field">
+    <%= f.label :title %>: <%= f.ajax_text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :content %><br />
+    <%= f.ajax_text_area :content, :style => "height:50px;width:300px;" %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

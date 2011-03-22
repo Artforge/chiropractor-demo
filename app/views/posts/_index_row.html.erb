@@ -1,0 +1,16 @@
+<% 
+template = local_assigns[:template]
+if template 
+	post.id = 0
+end
+%>
+<tr data-model="post" data-id="<%= post.id %>" class="<%= "template" if template %>">
+	<td data-property="user.name"><%= post.user.name if post.user %></td>
+	<td data-property="title"><%= post.title %></td>
+	<td data-property="content"><%= post.content %></td>
+	<td class="center">
+	<%= link_to('Show', post, "data-id" => post.id, "data-action" => "show", :class => "small blue button") %>
+	<%= link_to('Edit', (post.id ? edit_post_path(post) : ""), :rel => "#user_form_container", "data-id" => post.id, "data-action" => "edit", :class => "small green button") %>
+	<%= link_to('Destroy', post, :class => 'small red button remote-delete', :confirm => 'Are you sure?', :method => :delete) %>
+	</td>
+</tr>

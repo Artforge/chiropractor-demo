@@ -1,0 +1,103 @@
+
+/* root element for tabs  */
+ul.css-tabs {  
+	margin:0 !important; 
+	padding:0;
+	height:26px;
+	border-bottom:1px solid transparent;
+	li {  
+		float:left;	 
+		position:relative;
+		top:1px;
+		padding:0; 
+		margin:0;  
+		list-style-type:none;
+		text-align:center;
+		&.fr{
+			float:right;
+			a{
+				margin-right:0px;
+			}
+		}
+		a { 
+			font-size:11px;
+			display:block;
+			padding:4px 15px 2px;	
+			text-decoration:none;
+			border:1px solid $border_color;	
+			border-bottom:0px;
+			height:18px;
+			background-color:$tab_color;
+			color:$tab_color_text;
+			margin-right:2px;
+			-moz-border-radius-topleft: 4px;
+			-moz-border-radius-topright:4px;
+			position:relative;
+			top:1px;	
+			&:hover {
+				background-color:$tab_color_hover;
+				color:$tab_color_hover_text;
+			}
+			&.current {
+				background-color:$tab_color_current;
+				border-bottom:2px solid $tab_color_current;	
+				color:$tab_color_current_text;	
+				cursor:default;
+			}
+		}
+		&.hot{
+			a{
+				background:$tab_color_hot;
+				color:$tab_color_hot_text;
+				&:hover{
+					color:$tab_color_hot_hovertext;
+				}
+				&.current{
+					background:$tab_color_hot;
+					border-bottom:2px solid $tab_color_hot;	
+				}
+			}
+		}
+	}
+	
+	&.large{
+		height:32px;
+		a{
+			font-size:14px;
+			line-height:28px;
+			padding:0px 15px 6px;	
+			height:24px;
+			min-width:65px;
+			margin-right:5px;
+		}
+	}
+}
+
+/* tab pane */
+.css-panes{
+	& > div {
+		display:none;
+		border:1px solid $border_color;
+		border-width:1px;
+/*		min-height:150px;*/
+		padding:15px 20px;
+		background-color:#fafafa;
+		&.hot{
+			background:#FFDFF7;
+		}	
+		&.static{
+			display:block;
+		}
+	}
+	&.nopadding > div{
+		padding:0px;
+	}
+}
+
+form.formtastic{
+	.css-panes{
+		p{margin-bottom:10px;}
+		li{margin-bottom:0px;}
+		& > div {padding-bottom:5px;}
+	}
+}
