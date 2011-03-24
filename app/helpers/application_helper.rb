@@ -33,7 +33,11 @@ module ApplicationHelper
     sOut << "$(document).ready(function() {" + newline
 
     sOut << "var #{kollection_name.underscore} = new #{kollection_name}(#{raw(collection_json)},{url_base: '#{klass.name.pluralize.underscore}', url:'#{post_route}',display: $('[data-collection=\"#{kollection_name.underscore}\"]')});" + newline
-    sOut << "#{kontroller_name} = new Chiropractor.ResponseController(#{kollection_name.underscore});" + newline
+    sOut << "#{kontroller_name} = new Chiropractor.ResponseController(#{kollection_name.underscore},{"
+    sOut << "after_create: #{options[:after_create]}," if options[:after_create]
+    sOut << "after_update: #{options[:after_update]}," if options[:after_update]
+    sOut << "on_error: #{options[:on_error]}," if options[:on_error]
+    sOut << "});"
     sOut << "$('[data-action=\"sort\"]').click(function(){#{kollection_name.underscore}.sortView($(this).data(\"attribute\"));})" + newline
     sOut << "$('#new_#{klass_name.underscore}').click(function(){new#{klass_name}();return false;});" + newline
 

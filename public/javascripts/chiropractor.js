@@ -208,6 +208,10 @@ function dumpProps(obj, parent) {
 		initialize: function(collection,options){
 			// console.log("**",'[data-model="' + collection.model.class_name + '"][data-id="0"]')
 			this.template = $('[data-model="' + collection.model.prototype.class_name + '"][data-id="0"]');
+			this.after_create = options.after_create;
+			this.after_update = options.after_update;
+			this.on_error = options.on_error;
+			
 		},
 		// template: function(element){
 		// 			element || this.template;
@@ -241,7 +245,7 @@ function dumpProps(obj, parent) {
 			submitButton.click(function(){
 				if (submitButton.hasClass("disabled")){return false}
 				model.save(model.attributes,{
-					error:saveError,
+					error:this.on_error,
 					success:function(model,response){
 						this_controller.update(model)
 					}
@@ -251,7 +255,7 @@ function dumpProps(obj, parent) {
 		},
 		update: function(model){
 			model.refresh();
-			updateComplete(model)
+			this.after_update(model);
 		},
 		new: function(model,view){
 			this_controller = this;
@@ -264,7 +268,7 @@ function dumpProps(obj, parent) {
 				if (submitButton.hasClass("disabled")){return false}
 				model.url = this_controller.collection.url; // Shouldn't Backbone handle this?
 				model.save(model.attributes,{
-					error:saveError,
+					error:this.on_error,
 					success:function(model,response){
 						this_controller.create(model)
 					}
@@ -276,7 +280,7 @@ function dumpProps(obj, parent) {
 			model.display = this.template.clone(false).removeClass("template");
 			model.refresh();
 			this.collection.display.append(model.display);
-			createComplete(model)
+			this.after_create(model);
 		}
 	});
 
