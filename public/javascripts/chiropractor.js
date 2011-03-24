@@ -10,7 +10,6 @@ function getObjectClass(obj) {
             return arr[1];
         }
     }
-
     return undefined;
 }
 
@@ -162,6 +161,7 @@ function dumpProps(obj, parent) {
 			this.display = options.display // || this.fetchDisplay();
 			this.sortAttribute
 			this.sortOrder
+			this.url_base = options.url_base || (this.editor ? this.editor.attr("action") : false) ;
 		},
 		sortView: function(attribute){
 			this_collection = this;
@@ -214,7 +214,7 @@ function dumpProps(obj, parent) {
 		// 		},
 		show: function(id,view){
 			model = this.collection.get(id);
-			model.url = this.collection.url + "/" + model.id;
+			model.url = this.collection.url_base + "/" + model.id;
 			dataView = view ? view : "show";
 			// console.log(view,dataView);
 			model.display = $('[data-model="' + model.class_name + '"][data-view="' + dataView + '"]');
@@ -229,12 +229,13 @@ function dumpProps(obj, parent) {
 			this.collection.remove(model);
 		},
 		edit: function(id,view){
+			console.log("##")
 			this_controller = this;
 			dataView = view ? view : "edit";
 			model = this.collection.get(id);
 			model.editor = $('[data-model="' + model.class_name + '"][data-view="' + dataView + '"]');
 			model.loadForm();
-			model.url = this.collection.url + "/" + model.id;
+			model.url = this.collection.url_base + "/" + model.id;
 			submitButton = model.editor.find(':submit');
 			submitButton.unbind(); // REQUIRED in order to avoid multiple bindings building up
 			submitButton.click(function(){

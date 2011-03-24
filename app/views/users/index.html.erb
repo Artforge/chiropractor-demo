@@ -83,18 +83,6 @@
 		console.log("fileObj",fileObj);
 		console.log("response",response);
 		console.log("data",data);
-		// };
-		// if (JSON.parse(response).image){
-		// 			objImage = JSON.parse(response).image;
-		// 			images[objImage.id] = $("<li>").image(objImage,{template: IMAGE_TEMPLATE});
-		// 			$('#media').prepend(images[objImage.id]);
-		// 			jQuery.facebox({ ajax:"/pictures/" + objImage.id + "/edit"},"media_cropper");
-		// 		}else{
-		// 			objVideo = JSON.parse(response).video;
-		// 			videos[objVideo.id] = $("<li>").video(objVideo,{template: VIDEO_TEMPLATE});
-		// 			$('#media').prepend(videos[objVideo.id]);
-		// 		}
-		// 		$('a[rel*=facebox]').facebox();
 	}
 	
 </script>
@@ -132,7 +120,10 @@
 		model.editor.find(':submit').val(button + model.model_name);
 	}
 	
-	var User = Chiropractor.Model.extend({model_name: "User", collection_name: "Users",class_name: "user"});
+	
+	<%#= chiropractor_scripts(User,@users.to_json) %>
+	
+	var User = Chiropractor.Model.extend({model_name: "User", collection_name: "Users",class_name: "user", url_base: "users"});
 	var Users = Chiropractor.Collection.extend({url: '<%= users_url %>',model: User});
 	var users_controller;
 	
@@ -140,8 +131,6 @@
 	
 	$(document).ready(function() {
 		var editorElement = $("#user_form_container")
-		
-		// var users = new Users().fetch();
 		var users = new Users(<%= raw(@users.to_json) %>,{
 			url:"<%= users_url %>",
 			display: $('tbody[data-collection="users"]')

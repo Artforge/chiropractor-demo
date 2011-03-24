@@ -4,88 +4,36 @@
 		model.display.effect("highlight", {}, 1000);	
 		model.editor.effect("highlight", {}, 1000);	
 	}
-	
+
 	function createComplete(model){
 		model.editor.effect("highlight", {}, 1000);	
 	}
-	
+
 	function saveError(model,response){
 		alert("Error!")
 	}
 	
-	function setFormText(model,header,button){
-		model.editor.find('h2').html(header + model.model_name);
-		model.editor.find(':submit').val(button + model.model_name);
+	function newFormText(model){
+		model.editor.find('h2').html("Create a new" + model.model_name);
+		model.editor.find(':submit').val("Create" + model.model_name);
 	}
 	
-	function newPost(){
-		post = new Post(JSON.parse('<%= raw(Post.new.to_json) %>'),{});
-		posts_controller.new(post);
-		setFormText(post,"Create a new ","Create ")
+	function editFormText(model){
+		model.editor.find('h2').html("Edit " + model.model_name);
+		model.editor.find(':submit').val("Update " + model.model_name);
 	}
 	
-	var Post = Chiropractor.Model.extend({model_name: "Post", collection_name: "Posts",class_name: "post"});
-	var Posts = Chiropractor.Collection.extend({url: '<%= posts_url %>',model: Post});
-	var posts_controller;
-	
-	
-	$(document).ready(function() {
-		// var users = new Users().fetch();
-		var posts = new Posts(<%= raw(@posts.to_json(:include => :user)) %>,{
-			url:"<%= posts_url %>",
-			display: $('tbody[data-collection="posts"]')
-		});
-		
-		posts_controller = new Chiropractor.ResponseController(posts);
-		
-		$('[data-action="sort"]').click(function(){
-			posts.sortView($(this).data("attribute"));
-		})
-		
-		$('#new_post').click(function(){
-			newPost();
-			return false;
-		});
-		
-		$('a[data-action="edit"]').click(function(){
-			post = posts.get($(this).data("id"));
-			posts_controller.edit(post.id);
-			setFormText(post,"Edit ","Update ");
-			return false;
-		});
-		
-		$('a[data-action="show"]').click(function(){
-			posts_controller.show($(this).data("id"));
-			return false;
-		});
-		
-		$('input[type="date"]').datepicker({showOtherMonths: true, selectOtherMonths: true});
-		newPost();
-	});
+	<%= chiropractor_scripts(Post,@posts.to_json(:include => :user), {
+		:before_edit => "editFormText", 
+		:after_update => "updateComplete",
+		:before_new => "newFormText", 
+		:after_create => "createComplete", 
+		:on_error => "saveError"}) 
+	%>
 
 </script>
 
-<style>
-	#post_form_container{
-		border:1px solid #ccc;
-		margin-left:1px;
-		margin-right:-1px;
-	}
-	#post_form_container h2{
-		background: #eee; /* for non-css3 browsers */
-		background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#eee)); /* for webkit browsers */
-		background: -moz-linear-gradient(top,  #ccc,  #eee); /* for firefox 3.6+ */
-		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#eeeeee'); /* for IE */
-		margin:0px;
-		padding:5px;
-		border-bottom:1px solid #ccc;
-	}
-	#post_form_container > div{
-		padding:10px;
-	}
-
-	.bordered{padding:20px;border:1px solid lime;}
-</style>
+<%= stylesheet_link_tag "posts" %>
 
 <div style="width:800px;margin:10px;" class="fl">
 	<h1>
@@ -99,6 +47,7 @@
 			<%= render :partial => 'form', :locals => {:post => @post} %>
 		</div>
 	</div>
+	
 	<table class="data" width="100%">
 		<thead>
 			<tr>
