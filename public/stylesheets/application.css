@@ -458,7 +458,6 @@ a.button {
     line-height: 1;
     margin-bottom: 0; }
 
-/*@import "facebox";*/
 .facebox {
   display: none;
   padding: 10px;
@@ -694,7 +693,6 @@ form.formtastic .css-panes li {
 form.formtastic .css-panes > div {
   padding-bottom: 5px; }
 
-/*@import "calendar";*/
 /*
  * jQuery UI CSS Framework 1.8.10
  *
