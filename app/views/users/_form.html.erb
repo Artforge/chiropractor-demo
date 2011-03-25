@@ -1,38 +1,9 @@
-<!--<%#= form_for(user) do |f| %>
-	<div class="field">
-	    <%#= f.label :email %><br />
-	    <%#= f.ajax_text_field :email %>
-	  </div>
-	  <div class="field">
-	    <%#= f.label :name %><br />
-		<%#= f.ajax_text_field :name %>
-	  </div>
-	  <div class="field">
-	    <%#= f.label :biography %><br />
-		<%#= f.ajax_text_area :biography, :style => "height:50px;" %>
-	  </div>
-	  <div class="field">
-	    <%#= f.label :date_of_birth %><br />
-		<%#= f.ajax_date_field :date_of_birth %>
-	  </div>
-	  <div class="field">
-	    <%#= f.label :favorite_color %><br />
-		<%#= f.ajax_text_field :favorite_color %>
-	  </div>
-	  <div class="actions">
-	    <%#= f.submit :class => "green button" %>
-	  </div>-->
-	
-	  <!-- <input type="file" name="avatar" id="avatar" /> -->
-	  <!-- <div id="fileQueue"></div> -->
-<%# end %>
-
-<%= simple_form_for(user) do |f| %>
-	<%= f.input :email, :input_html => {"data-property" => :email} %>
-	<%= f.input :name, :input_html => {"data-property" => :name} %>
-	<%= f.input :biography, :input_html => {"data-property" => :biography, :style => "height:50px;"} %>
-	<%= f.input :date_of_birth, :input_html => {"data-property" => :date_of_birth} %>
-	<%= f.input :favorite_color, :input_html => {"data-property" => :favorite_color} %>
+<%= chiropractor_simple_form_for(user) do |f| %>
+	<%= f.input :email %>
+	<%= f.input :name %>
+	<%= f.input :biography, :input_html => {:style => "height:50px;"} %>
+	<%= f.input :date_of_birth %>
+	<%= f.input :favorite_color %>
 	<%= f.input :avatar %>
 	<%= f.button :submit, :class => "green button" %>
 	<div id="fileQueue"></div>

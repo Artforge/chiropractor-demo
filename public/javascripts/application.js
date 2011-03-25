@@ -25,9 +25,9 @@ jQuery(document).ready( function(){
 	});
 	
 	
-	$('a[rel*=facebox]').live("mousedown", function() { 
-	    $(this).facebox();
-	});
+	// $('a[rel*=facebox]').live("mousedown", function() { 
+	// 	    $(this).facebox();
+	// 	});
 	
 	jQuery('a.remote-delete').live("click",function() {  
 		if (confirm("Are you sure you want to delete this item?")){

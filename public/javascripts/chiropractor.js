@@ -208,7 +208,9 @@ function dumpProps(obj, parent) {
 		initialize: function(collection,options){
 			// console.log("**",'[data-model="' + collection.model.class_name + '"][data-id="0"]')
 			this.template = $('[data-model="' + collection.model.prototype.class_name + '"][data-id="0"]');
+			this.before_new = options.before_new;
 			this.after_create = options.after_create;
+			this.before_edit = options.before_edit;
 			this.after_update = options.after_update;
 			this.on_error = options.on_error;
 			
@@ -233,7 +235,6 @@ function dumpProps(obj, parent) {
 			this.collection.remove(model);
 		},
 		edit: function(id,view){
-			console.log("##")
 			this_controller = this;
 			dataView = view ? view : "edit";
 			model = this.collection.get(id);
@@ -242,6 +243,7 @@ function dumpProps(obj, parent) {
 			model.url = this.collection.url_base + "/" + model.id;
 			submitButton = model.editor.find(':submit');
 			submitButton.unbind(); // REQUIRED in order to avoid multiple bindings building up
+			// this.before_edit(model);
 			submitButton.click(function(){
 				if (submitButton.hasClass("disabled")){return false}
 				model.save(model.attributes,{
@@ -264,6 +266,7 @@ function dumpProps(obj, parent) {
 			model.loadForm();
 			submitButton = model.editor.find(':submit');
 			submitButton.unbind(); // REQUIRED in order to avoid multiple bindings building up
+			// this.before_new(model);
 			submitButton.click(function(){
 				if (submitButton.hasClass("disabled")){return false}
 				model.url = this_controller.collection.url; // Shouldn't Backbone handle this?

@@ -1,5 +1,63 @@
 <%= stylesheet_link_tag "uploadify" %>
 <%= javascript_include_tag 	"jquery.uploadify.min","swfobject" %>
+<%= javascript_include_tag "chiropractor_helpers" %>
+
+<script>
+	<%= chiropractor_scripts(User,@users.to_json,{
+		:before_edit => "initEdit", 
+		:after_update => "completeUpdate",
+		:before_new => "initNew", 
+		:after_create => "completeCreate", 
+		:on_error => "saveError"}) 
+	%>
+</script>
+
+<script>
+
+	function initEdit(model){
+		editFormText(model)
+		unUploadify(model.editor.find("#user_avatar"));
+		initUploadify(model);
+	}
+	
+	function initNew(model){
+		newFormText(model)
+		unUploadify(model.editor.find("#user_avatar"));
+	}
+
+	function closeOverlay(){
+		$('a.button[rel*="form"]').each(function() {
+			$(this).overlay().close();
+		});
+	}
+
+	function completeUpdate(model){
+		closeOverlay();
+		model.display.effect("highlight", {}, 1000);
+	}
+	
+	function completeCreate(model){
+		initOverlay(model.display)
+		closeOverlay();
+	}
+	
+	function initOverlay(node){
+		var scope = $('a.button[rel*="form"]');
+		if (node){
+			scope = node.find('a.button[rel*="form"]')
+		};
+		scope.overlay({
+			mask: {color: '#000000', loadSpeed: 200, opacity: 0.6}
+		});
+	}
+		
+	var overlay;
+	
+	$(document).ready(function() {
+		initOverlay();
+	});
+
+</script>
 
 <div style="width:800px;">
 	<h1>
@@ -55,7 +113,7 @@
 	
 	function initUploadify(model){
 		$('#user_avatar').uploadify ({
-			script          : model.collection.url + "/" + model.id,
+			script          : "/users/" + model.id,
 			method			: "PUT",
 			uploader        : '/flash/uploadify.swf',
 			multi           : false,
@@ -85,87 +143,4 @@
 		console.log("data",data);
 	}
 	
-</script>
-
-<script>
-
-	function closeOverlay(){
-		$('a.button[rel*="form"]').each(function() {
-			$(this).overlay().close();
-		});
-	}
-
-	function updateComplete(model){
-		closeOverlay();
-		model.display.effect("highlight", {}, 1000);
-	}
-	
-	function createComplete(model){
-		initOverlay(model.display)
-		closeOverlay();
-	}
-	
-	function saveError(model,response){
-		alert("Error!")
-	}
-	
-	function initOverlay(node){
-		var scope = $('a.button[rel*="form"]');
-		if (node){scope = node.find('a.button[rel*="form"]')};
-		scope.overlay({mask: {color: '#000000', loadSpeed: 200, opacity: 0.6}});
-	}
-	
-	function setFormText(model,header,button){
-		model.editor.find('h2').html(header + model.model_name);
-		model.editor.find(':submit').val(button + model.model_name);
-	}
-	
-	
-	<%#= chiropractor_scripts(User,@users.to_json) %>
-	
-	var User = Chiropractor.Model.extend({model_name: "User", collection_name: "Users",class_name: "user", url_base: "users"});
-	var Users = Chiropractor.Collection.extend({url: '<%= users_url %>',model: User});
-	var users_controller;
-	
-	var overlay;
-	
-	$(document).ready(function() {
-		var editorElement = $("#user_form_container")
-		var users = new Users(<%= raw(@users.to_json) %>,{
-			url:"<%= users_url %>",
-			display: $('tbody[data-collection="users"]')
-		});
-		
-		users_controller = new Chiropractor.ResponseController(users);
-		
-		$('[data-action="sort"]').click(function(){
-			users.sortView($(this).data("attribute"));
-		})
-		
-		$('#new_user').click(function(){
-			user = new User(JSON.parse('<%= raw(User.new.to_json) %>'),{});
-			users_controller.new(user);
-			unUploadify(user.editor.find("#user_avatar"));
-			setFormText(user,"Create a new ","Create ")
-		});
-		
-		$('a[data-action="edit"]').click(function(){
-			user = users.get($(this).data("id"));
-			users_controller.edit(user.id);
-			setFormText(user,"Edit ","Update ");
-			unUploadify(user.editor.find("#user_avatar"));
-			initUploadify(user);
-			// $("#user_form_container").show("blind",{},250);
-		});
-		
-		$('a[data-action="show"]').click(function(){
-			users_controller.show($(this).data("id"));
-			// $("#user_display_form").show("blind",{},250);
-		});
-		
-		$('input[type="date"]').datepicker({showOtherMonths: true, selectOtherMonths: true});
-		
-		initOverlay();
-	});
-
 </script>

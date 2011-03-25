@@ -51,7 +51,6 @@
 			user supplied callback methods won't be called
 		*/
 		function(pos, onLoad) {
-			
 			var conf = this.getConf(),
 				 w = $(window);				 
 				
@@ -69,8 +68,7 @@
 	);		
 
 	
-	function Overlay(trigger, conf) {		
-		
+	function Overlay(trigger, conf) {	
 		// private variables
 		var self = this,
 			 fire = trigger.add(self),
@@ -80,7 +78,6 @@
 			 opened,
 			 maskConf = $.tools.expose && (conf.mask || conf.expose),
 			 uid = Math.random().toString().slice(10);		
-		
 			 
 		// mask configuration
 		if (maskConf) {			
@@ -107,7 +104,6 @@
 		$.extend(self, {
 
 			load: function(e) {
-				
 				// can be opened only once
 				if (self.isOpened()) { return self; }
 				
@@ -125,8 +121,9 @@
 				// onBeforeLoad
 				e = e || $.Event();
 				e.type = "onBeforeLoad";
-				fire.trigger(e);				
-				if (e.isDefaultPrevented()) { return self; }				
+				fire.trigger(e);	
+				// KLUDGE : Had to comment below line out - not sure why			
+				// if (e.isDefaultPrevented()) { return self; }				
 
 				// opened
 				opened = true;
