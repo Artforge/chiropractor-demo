@@ -1,26 +1,48 @@
 module ApplicationHelper
-
-  class ChiropractorSimpleFormBuilder < SimpleForm::FormBuilder
-
-    def input(attribute_name, *args, &block)
-      options = args.extract_options!
-      if options[:input_html]
-        options[:input_html].reverse_merge!({"data-property" => attribute_name.to_s })
-      else
-        options[:input_html] = {"data-property" => attribute_name.to_s }
+  
+  # PATCHES Formtastic to extend inputs with "data-property" attribute
+  begin
+    class ChiropractorSemanticFormBuilder < Formtastic::SemanticFormBuilder
+      def input(attribute_name, *args, &block)
+        options = args.extract_options!
+        if options[:input_html]
+          options[:input_html].reverse_merge!({"data-property" => attribute_name.to_s })
+        else
+          options[:input_html] = {"data-property" => attribute_name.to_s }
+        end
+        super(attribute_name, *(args << options), &block)
       end
-      super(attribute_name, *(args << options), &block)
+    end
+    Formtastic::SemanticFormHelper.builder = ChiropractorSemanticFormBuilder
+  rescue
+    # logger.info("CHIROPRACTOR NOTE : Formtastic Library is not Installed")
+  end
+
+  # PATCHES Simple Form to extend inputs with "data-property" attribute
+  begin
+    class ChiropractorSimpleFormBuilder < SimpleForm::FormBuilder
+      def input(attribute_name, *args, &block)
+        options = args.extract_options!
+        if options[:input_html]
+          options[:input_html].reverse_merge!({"data-property" => attribute_name.to_s })
+        else
+          options[:input_html] = {"data-property" => attribute_name.to_s }
+        end
+        super(attribute_name, *(args << options), &block)
+      end
     end
 
+    def simple_form_for(object, *args, &block)
+      super(object, *(args << { :builder => ChiropractorSimpleFormBuilder }), &block)
+    end
+  rescue
+    # logger.info("CHIROPRACTOR NOTE : Simple Form Library is not Installed")
   end
 
-  def chiropractor_simple_form_for(object, *args, &block)
-    simple_form_for(object, *(args << { :builder => ChiropractorSimpleFormBuilder }), &block)
-  end
 
-
+  # PATCHES Rails Form Builder to extend inputs with "data-property" attribute
   class ChirpractorFormBuilder < ActionView::Helpers::FormBuilder
-
+    
     def text_field(method, options = {})
       options.reverse_merge!("data-property" => method.to_s)
       super(method, options)
@@ -116,16 +138,14 @@ module ApplicationHelper
 
   end
   
-  def chiropractor_form_for(object, *args, &block)
-    form_for(object, *(args << { :builder => ChirpractorFormBuilder }), &block)
-  end
+  ActionView::Base.default_form_builder = ChirpractorFormBuilder
 
-  # ActionView::Base.default_form_builder = ChirpractorFormBuilder
-
+  
   def ajax_content_tag(object, attrib, options = {}, escape = true)
-    content_tag_string("span", object[attrib], {"data-property",attrib.to_s}.merge(options), escape)
+    
+    options.reverse_merge!("data-property" => attrib.to_s)
+    content_tag_string(:span, object[attrib], options, escape)
   end
-
 
   def chiropractor_scripts(klass,collection_json, options={})
     newline = "\n"
